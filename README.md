@@ -1,16 +1,32 @@
-# notes_app
+# Flutter Notes App
 
-A new Flutter project.
+This is a simple Notes application developed using Flutter.  
+The app allows users to create, edit, and manage notes.
 
-## Getting Started
+## Project Purpose
+This project is used to demonstrate a CI/CD pipeline implementation using Jenkins, GitHub, and Docker.
 
-This project is a starting point for a Flutter application.
+## Features
+- Add notes
+- Edit notes
+- Delete notes
+- Simple and clean user interface
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies Used
+- Flutter
+- Dart
+- Jenkins
+- Docker
+- GitHub
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## CI/CD Pipeline
+The project is integrated with a Continuous Integration and Continuous Deployment (CI/CD) pipeline where:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Code is pushed to GitHub.
+2. Jenkins automatically detects changes.
+3. The application is built and tested.
+4. A Docker image is created.
+5. The image is pushed to Docker Hub.
+
+## Author
+Student project for CI/CD assignment.
