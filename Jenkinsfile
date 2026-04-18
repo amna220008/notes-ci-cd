@@ -1,8 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'cirrusci/flutter:stable'
+        }
+    }
 
     environment {
-        IMAGE_NAME = "yourdockerhubusername/flutter-app"
+        IMAGE_NAME = "YOUR_DOCKERHUB_USERNAME/flutter-app"
     }
 
     stages {
