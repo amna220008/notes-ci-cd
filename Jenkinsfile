@@ -1,11 +1,18 @@
-stage('Setup Flutter') {
-    steps {
-        sh '''
-            echo "Cleaning old Flutter folder..."
-            rm -rf flutter
+pipeline {
+    agent any
 
-            echo "Cloning Flutter..."
-            git clone https://github.com/flutter/flutter.git -b stable
-        '''
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Pipeline is working correctly'
+            }
+        }
     }
 }
