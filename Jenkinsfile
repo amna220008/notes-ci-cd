@@ -17,29 +17,31 @@ pipeline {
         stage('Build App') {
             steps {
                 sh 'mkdir -p build'
-                sh 'echo "CI/CD SUCCESS - Flutter/Web build simulated" > build/index.html'
+                sh 'echo "CI/CD SUCCESS" > build/index.html'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Create Dockerfile') {
             steps {
-                script {
-                    writeFile file: 'Dockerfile', text: '''
-                    FROM nginx:alpine
-                    COPY build /usr/share/nginx/html
-                    '''
-                    dockerImage = docker.build("${IMAGE_NAME}")
-                }
+                writeFile file: 'Dockerfile', text: '''
+                FROM nginx:alpine
+                COPY build /usr/share/nginx/html
+                '''
+            }
+        }
+
+        stage('Build Docker Image (Shell)') {
+            steps {
+                sh 'docker build -t amna220008/notes-ci-cd:latest .'
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        dockerImage.push("latest")
-                    }
-                }
+                sh '''
+                echo "$DOCKER_PASS" | docker login -u amna220008 --password-stdin
+                docker push amna220008/notes-ci-cd:latest
+                '''
             }
         }
     }
