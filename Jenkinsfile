@@ -9,11 +9,11 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/your-repo-url.git'
+                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd.git'
             }
         }
 
-        stage('Install Flutter Dependencies') {
+        stage('Install Dependencies') {
             steps {
                 sh 'flutter pub get'
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-credentials-id') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
                         dockerImage.push("latest")
                     }
                 }
