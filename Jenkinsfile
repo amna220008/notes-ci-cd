@@ -10,17 +10,7 @@ pipeline {
         }
 
         stage('Build App') {
-            steps {
-                sh '''
-                echo "Building application..."
-                mkdir -p build
-                echo "CI/CD SUCCESS - build completed"
-                '''
-            }
-        }
-
-        stage('Docker Step') {
-            steps {
+            ste
                 echo "Simulating Docker build (no real Docker required)"
             }
         }
