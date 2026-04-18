@@ -13,23 +13,6 @@ pipeline {
             }
         }
 
-        stage('Install Flutter Dependencies') {
-            steps {
-                sh '''
-                    echo "Installing Flutter dependencies..."
-                    flutter pub get
-                '''
-            }
-        }
-
-        stage('Build Flutter Web') {
-            steps {
-                sh '''
-                    flutter build web
-                '''
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh '''
