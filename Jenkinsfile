@@ -1,17 +1,45 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "amna220008/notes-ci-cd"
+    }
+
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd.git'
+                git branch: 'main',
+                url: 'https://github.com/amna220008/notes-ci-cd.git'
             }
         }
 
-        stage('Build') {
+        stage('Build App') {
             steps {
-                echo 'Pipeline is working correctly'
+                sh 'mkdir -p build'
+                sh 'echo "CI/CD SUCCESS - Flutter/Web build simulated" > build/index.html'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    writeFile file: 'Dockerfile', text: '''
+                    FROM nginx:alpine
+                    COPY build /usr/share/nginx/html
+                    '''
+                    dockerImage = docker.build("${IMAGE_NAME}")
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
+                        dockerImage.push("latest")
+                    }
+                }
             }
         }
     }
