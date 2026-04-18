@@ -1,9 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'cirrusci/flutter:stable'
-        }
-    }
+    agent any
 
     environment {
         IMAGE_NAME = "YOUR_DOCKERHUB_USERNAME/flutter-app"
@@ -17,33 +13,37 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Flutter Dependencies') {
             steps {
-                sh 'flutter pub get'
+                sh '''
+                    echo "Installing Flutter dependencies..."
+                    flutter pub get
+                '''
             }
         }
 
         stage('Build Flutter Web') {
             steps {
-                sh 'flutter build web'
+                sh '''
+                    flutter build web
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("${IMAGE_NAME}")
-                }
+                sh '''
+                    docker build -t $IMAGE_NAME .
+                '''
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-credentials') {
-                        dockerImage.push("latest")
-                    }
-                }
+                sh '''
+                    docker login -u YOUR_DOCKER_USERNAME -p YOUR_DOCKER_PASSWORD
+                    docker push $IMAGE_NAME
+                '''
             }
         }
     }
