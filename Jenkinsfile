@@ -5,29 +5,31 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd.git'
+                git 'https://github.com/amna220008/notes-ci-cd'
             }
         }
 
-        stage('Build App') {
+        stage('Flutter Build') {
             steps {
                 sh '''
-                echo "Building application..."
-                mkdir -p build
-                echo "CI/CD SUCCESS - build completed"
+                flutter pub get
+                flutter build web
                 '''
             }
         }
 
-        stage('Docker Step') {
+        stage('Docker Build') {
             steps {
-                echo "Simulating Docker build (no real Docker required)"
+                sh 'docker build -t notes-app .'
             }
         }
 
-        stage('Push') {
+        stage('Run Container') {
             steps {
-                echo "Simulating Docker push to Docker Hub"
+                sh '''
+                docker rm -f notes-container || true
+                docker run -d -p 3000:80 --name notes-container notes-app
+                '''
             }
         }
     }
