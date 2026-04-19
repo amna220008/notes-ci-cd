@@ -1,28 +1,15 @@
-pipeline {
-    agent any
+FROM jenkins/jenkins:lts
 
-    stages {
+USER root
 
-        stage('Flutter Build') {
-            steps {
-                sh 'flutter pub get'
-                sh 'flutter build web'
-            }
-        }
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git curl unzip xz-utils zip libglu1-mesa
 
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t flutter-app .'
-            }
-        }
+# Install Flutter
+RUN git clone https://github.com/flutter/flutter.git /flutter
+ENV PATH="/flutter/bin:/flutter/bin/cache/dart-sdk/bin:${PATH}"
 
-        stage('Run Container') {
-            steps {
-                sh '''
-                docker rm -f flutter-container || true
-                docker run -d -p 3000:80 --name flutter-container flutter-app
-                '''
-            }
-        }
-    }
-}
+RUN flutter doctor
+
+USER jenkins
