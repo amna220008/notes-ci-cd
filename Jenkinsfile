@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/amna220008/notes-ci-cd'
-            }
-        }
-
         stage('Flutter Build') {
             steps {
                 sh 'flutter pub get'
