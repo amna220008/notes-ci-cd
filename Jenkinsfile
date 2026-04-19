@@ -2,34 +2,28 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
-                git 'https://github.com/amna220008/notes-ci-cd'
+                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd'
             }
         }
 
-        stage('Flutter Build') {
+        stage('Build Flutter') {
             steps {
-                sh '''
-                flutter pub get
-                flutter build web
-                '''
+                sh 'flutter pub get'
+                sh 'flutter build web'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t notes-app .'
+                echo "Build Docker image here"
             }
         }
 
-        stage('Run Container') {
+        stage('Deploy') {
             steps {
-                sh '''
-                docker rm -f notes-container || true
-                docker run -d -p 3000:80 --name notes-container notes-app
-                '''
+                echo "Deploy step"
             }
         }
     }
