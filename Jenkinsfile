@@ -1,34 +1,11 @@
-pipeline {
-    agent any
+stage('Login to Docker Hub') {
+    steps {
+        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+    }
+}
 
-    stages {
-
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/amna220008/notes-ci-cd.git'
-            }
-        }
-
-        stage('Build App') {
-            steps {
-                sh '''
-                echo "Building application..."
-                mkdir -p build
-                echo "CI/CD SUCCESS - build completed"
-                '''
-            }
-        }
-
-        stage('Docker Step') {
-            steps {
-                echo "Simulating Docker build (no real Docker required)"
-            }
-        }
-
-        stage('Push') {
-            steps {
-                echo "Simulating Docker push to Docker Hub"
-            }
-        }
+stage('Push Image') {
+    steps {
+        sh 'docker push amna220008/notes-app:latest'
     }
 }
