@@ -1,13 +1,10 @@
-pipeline {
-    agent any
+FROM nginx:alpine
 
-    stages {
+# Copy Flutter web build output
+COPY build/web /usr/share/nginx/html
 
-        stage('Checkout') {
-            steps 
-            steps {
-                echo "Simulating Docker push to Docker Hub"
-            }
-        }
-    }
-}
+# Expose web port
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
