@@ -9,27 +9,21 @@ pipeline {
             }
         }
 
-        stage('Install Flutter (inside Jenkins container)') {
+        stage('Flutter Build (Docker)') {
             steps {
                 sh '''
-                apt update
-                apt install -y git curl unzip xz-utils
-
-                git clone https://github.com/flutter/flutter.git -b stable
-                export PATH="$PATH:`pwd`/flutter/bin"
-
-                flutter --version
+                docker run --rm -v $PWD:/app -w /app cirrusci/flutter:stable \
                 flutter pub get
+
+                docker run --rm -v $PWD:/app -w /app cirrusci/flutter:stable \
+                flutter build web
                 '''
             }
         }
 
-        stage('Build Web') {
+        stage('Docker Info') {
             steps {
-                sh '''
-                export PATH="$PATH:`pwd`/flutter/bin"
-                flutter build web
-                '''
+                echo "Now ready for Docker build"
             }
         }
 
