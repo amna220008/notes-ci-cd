@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'cirrusci/flutter:latest'
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -8,22 +12,15 @@ pipeline {
             }
         }
 
-        stage('Build Flutter') {
+        stage('Get Packages') {
             steps {
                 sh 'flutter pub get'
+            }
+        }
+
+        stage('Build Web') {
+            steps {
                 sh 'flutter build web'
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                echo "Build Docker image here"
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo "Deploy step"
             }
         }
     }
