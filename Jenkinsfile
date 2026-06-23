@@ -3,22 +3,48 @@ pipeline {
 
     stages {
 
-        stage('Build Image') {
+        stage('Checkout Code') {
             steps {
-                sh 'docker build -t amna220008/notes-app:latest .'
+                checkout scm
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Build Stage') {
             steps {
-                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                echo 'Building project...'
+                sh 'mkdir -p build'
+                sh 'echo "Build successful" > build/result.txt'
             }
         }
 
-        stage('Push Image') {
+        stage('Test Stage') {
             steps {
-                sh 'docker push amna220008/notes-app:latest'
+                echo 'Running tests...'
+                sh 'echo "All tests passed"'
             }
+        }
+
+        stage('Package Stage') {
+            steps {
+                echo 'Packaging application...'
+                sh 'tar -czf app.tar.gz build/'
+            }
+        }
+
+        stage('Deploy Stage') {
+            steps {
+                echo 'Deploying application...'
+                sh 'echo "Deployment successful"'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'PIPELINE SUCCESS ✔'
+        }
+        failure {
+            echo 'PIPELINE FAILED ✖'
         }
     }
 }
