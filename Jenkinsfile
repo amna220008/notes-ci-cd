@@ -1,11 +1,19 @@
-stage('Login to Docker Hub') {
-    steps {
-        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-    }
-}
+pipeline {
+    agent any
 
-stage('Push Image') {
-    steps {
-        sh 'docker push amna220008/notes-app:latest'
+    stages {
+
+        stage('Login to Docker Hub') {
+            steps {
+                bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+            }
+        }
+
+        stage('Push Image') {
+            steps {
+                bat 'docker push amna220008/notes-app:latest'
+            }
+        }
+
     }
 }
