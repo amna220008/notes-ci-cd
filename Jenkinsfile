@@ -3,17 +3,28 @@ pipeline {
 
     stages {
 
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/amna220008/notes-ci-cd.git'
+            }
+        }
+
         stage('Login to Docker Hub') {
             steps {
-                bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
+                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                sh 'docker build -t amna220008/notes-app:latest .'
             }
         }
 
         stage('Push Image') {
             steps {
-                bat 'docker push amna220008/notes-app:latest'
+                sh 'docker push amna220008/notes-app:latest'
             }
         }
-
     }
 }
